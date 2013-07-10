@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import urllib
+import HTML
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 
@@ -17,7 +18,7 @@ class Employee(object):
     stringb = ''
     for singleitem in self.items:
       if self.items[singleitem][0] != '':
-	stringb += self.items[singleitem][1] + self.items[singleitem][0] + '\n'
+	stringb += self.items[singleitem][1] + self.items[singleitem][0] + ' <br>'
     stringb = stringb.encode('utf8')
     return (stringb)
   def addvalue(self, value, hint, relpos):
@@ -32,6 +33,7 @@ for listlink in listsoup.find_all('a'):
   linklist.append(listlink.get('href'))
 linklist.remove('index.php?id=867')
 linklist.remove('index.php?id=925')
+set(linklist)
 
 for currentlink in linklist:
   currentpage = urllib.urlopen('http://www.iff.tu-bs.de/'+currentlink)
@@ -50,4 +52,10 @@ for currentlink in linklist:
     employeelist[-1].addvalue('lectures', 'Vorlesungsbetreuung:', +1)
     employeelist[-1].addvalue('room', 'Raum:', +1)
     employeelist[-1].items['picture'][0] = 'http://www.iff.tu-bs.de/' + str([image["src"] for image in currentsoup.find('div', attrs={ 'id': 'fotoMitarbeiter'})][0])
-    print employeelist[-1]
+
+table = HTML.Table(header_row=['', '', ''])
+for currentemp in employeelist:
+  image = '<IMG SRC="' + currentemp.items['picture'][0] + '">'
+  table.rows.append([image, str(currentemp)])
+htmlcode = str(table)
+print htmlcode
