@@ -13,6 +13,7 @@ employeelist =[]
 
 class Employee(object):
   def __init__(self):
+    self.picture = ''
     self.items = OrderedDict([('name', ['', 'Name: ']), ('room', ['', 'Raum: ']), ('telephone', ['', 'Tel.: ']), ('email', ['', 'Email: ']), ('occupation', ['', 'Arbeitsgebiet: ']), ('addoccupation', ['', 'Weitere Aufgaben: ']), ('fax', ['', 'Fax: ']), ('lectures', ['', 'Vorlesungsbetreuung: ']), ('picture', ['', ''])]) 
   def __repr__(self):
     stringb = ''
@@ -29,11 +30,20 @@ class Employee(object):
     except:
       pass
 
+def removedupes(x):
+  result = []
+  seen = set()
+  for i in x:
+    if i not in seen:
+      result.append(i)
+      seen.add(i)
+  return result
+
 for listlink in listsoup.find_all('a'):
   linklist.append(listlink.get('href'))
 linklist.remove('index.php?id=867')
 linklist.remove('index.php?id=925')
-set(linklist)
+linklist = removedupes(linklist)
 
 for currentlink in linklist:
   currentpage = urllib.urlopen('http://www.iff.tu-bs.de/'+currentlink)
@@ -51,11 +61,15 @@ for currentlink in linklist:
     employeelist[-1].addvalue('email', 'Email:', +1)
     employeelist[-1].addvalue('lectures', 'Vorlesungsbetreuung:', +1)
     employeelist[-1].addvalue('room', 'Raum:', +1)
-    employeelist[-1].items['picture'][0] = 'http://www.iff.tu-bs.de/' + str([image["src"] for image in currentsoup.find('div', attrs={ 'id': 'fotoMitarbeiter'})][0])
+    employeelist[-1].picture = 'http://www.iff.tu-bs.de/' + str([image["src"] for image in currentsoup.find('div', attrs={ 'id': 'fotoMitarbeiter'})][0])
 
-table = HTML.Table(header_row=['', '', ''])
 for currentemp in employeelist:
-  image = '<IMG SRC="' + currentemp.items['picture'][0] + '">'
-  table.rows.append([image, str(currentemp)])
+  image = '<IMG SRC="' + currentemp.picture + '">'
+  try:
+    table.rows.append([image, str(currentemp)])
+  except:
+    firstrow = [[image, str(currentemp)]]
+    table = HTML.Table(firstrow)
+    pass
 htmlcode = str(table)
 print htmlcode
