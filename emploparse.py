@@ -1,16 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# pip install urllib
 import urllib
+# pip install html.py
 import HTML
+# pip install BeautifulSoup4
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 
+# GET the link page from the server and create a bs4 object of it
 listpage = urllib.urlopen('http://www.iff.tu-bs.de/index.php?id=878')
 listsoup = BeautifulSoup(listpage.read())
 linklist = []
 employeelist =[]
 
+# This class represents a single emplyee with all relevant attributes
 class Employee(object):
   def __init__(self):
     self.picture = ''
@@ -30,6 +35,7 @@ class Employee(object):
     except:
       pass
 
+# this function removed duplicate entries from a list without changing its order
 def removedupes(x):
   result = []
   seen = set()
@@ -39,16 +45,22 @@ def removedupes(x):
       seen.add(i)
   return result
 
+# find all links in the linkpage and add them to our linklist, 
+# then remove duplicates and false entries
 for listlink in listsoup.find_all('a'):
   linklist.append(listlink.get('href'))
 linklist.remove('index.php?id=867')
 linklist.remove('index.php?id=925')
 linklist = removedupes(linklist)
 
+# get and parse all remaining links
 for currentlink in linklist:
   currentpage = urllib.urlopen('http://www.iff.tu-bs.de/'+currentlink)
   currentsoup = BeautifulSoup(currentpage.read())
   currentset = []
+
+# if they are real emplyee subpages, create an employee object
+# and add the attributes
   if currentsoup.find(id='mitarbeiter'):
     employeelist.append(Employee())
     employeelist[-1].items['name'][0] = currentsoup.find('div', attrs={ 'id': 'name'}).get_text()
@@ -63,6 +75,7 @@ for currentlink in linklist:
     employeelist[-1].addvalue('room', 'Raum:', +1)
     employeelist[-1].picture = 'http://www.iff.tu-bs.de/' + str([image["src"] for image in currentsoup.find('div', attrs={ 'id': 'fotoMitarbeiter'})][0])
 
+# create and print a simple HTML-table from the extracted data
 for currentemp in employeelist:
   image = '<IMG SRC="' + currentemp.picture + '">'
   try:
