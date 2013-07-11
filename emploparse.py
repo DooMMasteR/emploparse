@@ -19,7 +19,8 @@ employeelist =[]
 class Employee(object):
   def __init__(self):
     self.picture = ''
-    self.items = OrderedDict([('name', ['', 'Name: ']), ('room', ['', 'Raum: ']), ('telephone', ['', 'Tel.: ']), ('email', ['', 'Email: ']), ('occupation', ['', 'Arbeitsgebiet: ']), ('addoccupation', ['', 'Weitere Aufgaben: ']), ('fax', ['', 'Fax: ']), ('lectures', ['', 'Vorlesungsbetreuung: ']), ('picture', ['', ''])]) 
+    self.items = OrderedDict([('name', ['', '<b>Name:</b> ']), ('room', ['', '<b>Raum:</b> ']), ('telephone', ['', '<b>Tel.:</b> ']), ('email', ['', '<b>Email:</b> ']), ('occupation', ['', '<b>Arbeitsgebiet:</b> ']), ('addoccupation', ['', '<b>Weitere Aufgaben:</b> ']), ('fax', ['', '<b>Fax:</b> ']), ('lectures', ['', '<b>Vorlesungsbetreuung:</b> ']), ('picture', ['', ''])]) 
+
   def __repr__(self):
     stringb = ''
     for singleitem in self.items:
@@ -84,5 +85,7 @@ for currentemp in employeelist:
     firstrow = [[image, str(currentemp)]]
     table = HTML.Table(firstrow)
     pass
-htmlcode = str(table)
+htmlcode = '<!DOCTYPE HTML>\n<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n<title>Test</title>\n<style type="text/css"> \n\ttable { page-break-inside:auto }\n\ttr    { page-break-inside:avoid; page-break-after:auto }\n</style>\n</head>\n<body>\n'
+htmlcode += str(table)
+htmlcode += '\n</body>\n</html>'
 print htmlcode
