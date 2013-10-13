@@ -5,6 +5,7 @@
 import urllib
 # pip install html.py
 import HTML
+import datetime
 # pip install BeautifulSoup4
 from bs4 import BeautifulSoup
 from collections import OrderedDict
@@ -88,4 +89,8 @@ for currentemp in employeelist:
 htmlcode = '<!DOCTYPE HTML>\n<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n<title>Test</title>\n<style type="text/css"> \n\ttable { page-break-inside:auto }\n\ttr    { page-break-inside:avoid; page-break-after:auto }\n</style>\n</head>\n<body>\n'
 htmlcode += str(table)
 htmlcode += '\n</body>\n</html>'
-print htmlcode
+date = datetime.datetime.now().strftime('%Y-%m-%d')
+f = open('mitarbeiter-' + date + '.html', 'w')
+print 'Writing current HTML file. \n'
+f.write(htmlcode)
+f.close()
