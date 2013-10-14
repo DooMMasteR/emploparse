@@ -36,6 +36,26 @@ class Employee(object):
 	self.items[value][0] += '@tu-braunschweig.de'
     except:
       pass
+  def makevcard(self):
+    stringv = 'BEGIN:VCARD\nVERSION:2.1\nFN:' 
+    
+    tmpfn = self.items['name'][0]
+    tmpfn = tmpfn.replace('Dr.-', '')
+    tmpfn = tmpfn.replace('Dipl.-', '')
+    tmpfn = tmpfn.replace('B.Sc.', '')
+    tmpfn = tmpfn.replace('M.Sc.', '')
+    tmpfn = tmpfn.replace('Ing.', '')
+    tmpfn = tmpfn.replace('Inf.', '')
+    tmpfn = tmpfn.replace('Wirtsch.-', '')
+    tmpfn = tmpfn.replace('Prof.', '')
+    tmpfn = tmpfn.replace('em.', '')
+    stringv += tmpfn.lstrip() + '\n'
+    if self.items['telephone'][0]:
+      stringv += 'TEL;WORK;VOICE:'+self.items['telephone'][0] + '\n'
+    stringv += 'END:VCARD\n'
+    stringv = stringv.encode('utf8')
+    return stringv
+
 
 # this function removed duplicate entries from a list without changing its order
 def removedupes(x):
@@ -80,6 +100,7 @@ for currentlink in linklist:
 # create and print a simple HTML-table from the extracted data
 for currentemp in employeelist:
   image = '<IMG SRC="' + currentemp.picture + '">'
+  print currentemp.makevcard()
   try:
     table.rows.append([image, str(currentemp)])
   except:
