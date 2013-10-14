@@ -1,4 +1,4 @@
 emploparse
 ==========
 
-Parsing the IFF employer page in python
+Parsing the IFF employee page in python
