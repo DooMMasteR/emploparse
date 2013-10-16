@@ -15,6 +15,7 @@ listpage = urllib.urlopen('http://www.iff.tu-bs.de/index.php?id=878')
 listsoup = BeautifulSoup(listpage.read())
 linklist = []
 employeelist =[]
+vcard = ''
 
 # This class represents a single emplyee with all relevant attributes
 class Employee(object):
@@ -37,7 +38,17 @@ class Employee(object):
     except:
       pass
   def makevcard(self):
-    stringv = 'BEGIN:VCARD\nVERSION:2.1\nFN:' 
+    stringv = 'BEGIN:VCARD\nVERSION:2.1\nN:' 
+    sepname = self.items['name'][0].split()
+    try:
+      stringv += sepname[-1] + ';'
+      stringv += sepname[-2] + ';'
+      stringv += sepname[-3] + ';'
+      stringv += sepname[-4] + ';'
+      stringv += sepname[-5]
+    except:
+      pass
+    stringv += '\n'
     
     tmpfn = self.items['name'][0]
     tmpfn = tmpfn.replace('Dr.-', '')
@@ -49,9 +60,14 @@ class Employee(object):
     tmpfn = tmpfn.replace('Wirtsch.-', '')
     tmpfn = tmpfn.replace('Prof.', '')
     tmpfn = tmpfn.replace('em.', '')
-    stringv += tmpfn.lstrip() + '\n'
+    stringv += 'FN:' + tmpfn.lstrip() + '\n'
+    
     if self.items['telephone'][0]:
-      stringv += 'TEL;WORK;VOICE:'+self.items['telephone'][0] + '\n'
+      stringv += 'TEL;WORK;VOICE:' + self.items['telephone'][0] + '\n'
+    
+    if self.items['email'][0]:
+      stringv += 'EMAIL;PREF;INTERNET:' + self.items['email'][0] + '\n'
+    
     stringv += 'END:VCARD\n'
     stringv = stringv.encode('utf8')
     return stringv
@@ -100,7 +116,7 @@ for currentlink in linklist:
 # create and print a simple HTML-table from the extracted data
 for currentemp in employeelist:
   image = '<IMG SRC="' + currentemp.picture + '">'
-  print currentemp.makevcard()
+  vcard += currentemp.makevcard()
   try:
     table.rows.append([image, str(currentemp)])
   except:
@@ -114,4 +130,8 @@ date = datetime.datetime.now().strftime('%Y-%m-%d')
 f = open('mitarbeiter-' + date + '.html', 'w')
 print 'Writing current HTML file. \n'
 f.write(htmlcode)
+f.close()
+f = open('vcard-' + date + '.vcf', 'w')
+print 'Writing current vCard file. \n'
+f.write(vcard)
 f.close()
