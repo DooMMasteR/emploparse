@@ -33,8 +33,9 @@ class Employee(object):
   def addvalue(self, value, hint, relpos):
     try:
       self.items[value][0] = currentset[currentset.index(hint)+relpos]
+      print self.items[value][0]
       if value is 'email':
-	self.items[value][0] += '@tu-braunschweig.de'
+	      self.items[value][0] += '@' + currentset[currentset.index(hint)+relpos+1]
     except:
       pass
   def makevcard(self):
