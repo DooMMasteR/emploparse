@@ -88,7 +88,7 @@ def removedupes(x):
 # then remove duplicates and false entries
 for listlink in listsoup.find_all('a'):
   linklist.append(listlink.get('href'))
-linklist.remove('index.php?id=867')
+# linklist.remove('index.php?id=867')
 linklist.remove('index.php?id=925')
 linklist = removedupes(linklist)
 
@@ -124,7 +124,7 @@ for currentemp in employeelist:
     firstrow = [[image, str(currentemp)]]
     table = HTML.Table(firstrow)
     pass
-htmlcode = '<!DOCTYPE HTML>\n<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n<title>Test</title>\n<style type="text/css"> \n\ttable { page-break-inside:auto }\n\ttr    { page-break-inside:avoid; page-break-after:auto }\n</style>\n</head>\n<body>\n'
+htmlcode = '<!DOCTYPE HTML>\n<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n<title>Mitarbeiterliste</title>\n<style type="text/css"> \n\ttable { page-break-inside:auto }\n\ttr    { page-break-inside:avoid; page-break-after:auto }\n</style>\n</head>\n<body>\n'
 htmlcode += str(table)
 htmlcode += '\n</body>\n</html>'
 date = datetime.datetime.now().strftime('%Y-%m-%d')
